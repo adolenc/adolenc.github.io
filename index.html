@@ -1,1 +1,98 @@
-h-hi
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Andrej Dolenc</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(45deg, #3494E6, #EC6EAD, #FFD662);
+            background-size: 400% 400%;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: gradientAnimation 20s infinite alternate;
+            color: #ffffff;
+            text-shadow: 0px 0px 20px #000; /* Add drop shadow to h1 */
+        }
+
+        .container {
+            text-align: left;
+            margin: 0 auto;
+            max-width: 600px;
+            margin-left: 15em;
+        }
+
+        h1 {
+            font-size: 4em;
+            margin-bottom: 0em;
+            margin-bottom: -0.2em;
+        }
+
+        h2 {
+            font-size: 2em;
+            margin-bottom: 2.2em;
+        }
+
+        p {
+            font-size: 1.5em;
+            margin-bottom: 1em;
+        }
+
+        a {
+            text-decoration: none;
+            font-weight: bold;
+            color: #ffffff;
+        }
+        a img {
+            display: inline-block;
+            width: 24px;
+            height: 24px;
+            vertical-align: baseline;
+            opacity: 0;
+            transition: opacity 0.3s ease-out; /* Add a transition effect */
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+        a:hover img {
+            opacity: 1;
+        }
+
+        @keyframes gradientAnimation {
+            0% {
+                background-position: 0% 50%;
+            }
+            100% {
+                background-position: 100% 50%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Andrej Dolenc</h1>
+        <h2>Software engineer</h2>
+        <p>Find me on <a href="https://github.com/adolenc/" target="_blank">
+          Github
+          <img src="icons8-github-30.png">
+        </a></p>
+        <p>Check out my <a href="https://adolenc.me/" target="_blank">
+          CV
+          <img src="icons8-cv-30.png">
+        </a></p>
+        <p>Connect with me on <a href="https://www.linkedin.com/in/adolenc/" target="_blank">
+          LinkedIn
+          <img src="icons8-linkedin-30.png">
+        </a></p>
+    </div>
+</body>
+</html>
+
