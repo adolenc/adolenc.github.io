@@ -1,0 +1,39 @@
+- i used to use arch, it was shit
+- i used debian testing 10 years, accidentally switched to unstable once and couldnt really go back
+- package managers are great but afraid to update my system to not break anything
+
+- nix seems like a lot of effort to figure out
+- fedora immutable wouldnt install in virtualbox
+- even if it did, even something as simple as changing a keyboard layout seems like an insane amount of work
+
+- debian stable
+  - tmpfs with half of ram
+  - no swap
+  - oom killer
+- base linux
+  - X.org
+  - i3
+  - nvidia drivers
+  - pulseaudio
+  - nmtui
+  - yadm for dotfiles
+  - kitty terminal
+    - zsh
+    - fzf
+  - ssh
+  - colemak keyboard layout (where is it defined)
+- distrobox with ubuntu installed 
+  - install command (with nvidia cuda)
+  - binding in i3 for new terminal
+  - "n" alias for new terminal in current directory
+  - passthrough to host os
+  - how to destroy a container
+  - how does docker work
+- flatpak for gui apps that should be updated all the time
+  - flatpak ~/bin/ scripts
+  - flatpak permissions app
+  - updating flatpaks
+  - steam & proton
+  - download folders default to tmpfs
+
+- solid setup, debian stable is pretty much unbreakable, and the containers themselves are disposable, so i can't apt-get mess my setup up
