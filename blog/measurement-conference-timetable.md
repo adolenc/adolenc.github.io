@@ -14,8 +14,12 @@
 - now we use approximation algorithms to generate them
 
 - 2 stages
-  - stage 1: generate a valid 
+  - stage 1: generate a valid lecture arrangement across the time slots
   - stage 2: assign the attendees to individual lectures in such a way that most of them 
+  - the two stages are independent, so the first stage is executed as many times as necessary to generate a valid lecture arrangement, which is then serialized to the disk and can be used independently by stage 2
+  - instead of doing any sort of parallelism, just spawn n independent processes and have them write results into an output folder with unique UUID
+
+aside: simulated annealing
 
 stage 1:
 - there are actually a few more constraints:
@@ -23,6 +27,7 @@ stage 1:
   - Dewesoft employees can hold multiple lectures
   - some lectures can only be held in certain slots or certain (subset of) rooms
   - some lectures should be held before others (think basic -> advanced type of lectures)
+- a dilemma that might pop up is which constraints do you encode into the MOVE part of the algorithm and which into the ENERGY part. From development point of view it is the easiest to just move every constraint into the ENERGY part and just let the randomness do its job, but that can result in timetables taking way longer to generate - while the MOVE is now almost free, and ENERGY isn't really that expensive to calculate, it just takes many more iterations to get to good ENERGY, and each iteration needs to create a copy of the entire state (and copies are expensive). This could be solved by instead adding support for UNDO_MOVE to the library.
 - MOVE: swap two lectures. after swapping, rearrange the lectures so that the lectures with most registered attendees get the biggest rooms
 - ENERGY: check that lecturer doesn't have a lecture in the same slot. all the constraints have to hold. lectures should be held in rooms so that they have enough chairs for all the registered attendees for that lecture. all of these constraints should hold so energy should end up as 0, otherwise we should manually relax some constraints.
 
@@ -33,6 +38,12 @@ stage 2:
 
 results:
 - more than 90% of wishes were respected
+- pypy worked about 2x faster than cpython, resulting in far larger space being checked
+- stage 1 took about 1 minute to generate, and stage 2 took about 10, but the process had to be repeated multiple times to make the solution as good as possible
+
+conclusion:
+- a large part of the process is collaborating with organizers
+- the final timetable is never really final, people only realize something is wrong after the timetable is already generated (expect final_final_v2 timetables)
 - in the end, guests anyway use the timetable as a reference, so many pick other lectures to go to
 
 ideas for alternative approaches:
