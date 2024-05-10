@@ -7,9 +7,9 @@ header-includes:
   <link rel="shortcut icon" href="https://cdn.sstatic.net/Sites/tex/Img/favicon.ico?v=91427af8e60a">
 include-after: |
   <div id="backlinks">
-    <a href="http://www.adolenc.me" class="backlink"><< Who am I</a>
-    <a href="../" class="backlink">< My other articles</a>
-    <a href="../" class="backlink">RSS</a>
+    <a href="http://www.adolenc.me"><< Who am I</a>
+    <a href="../">< My other articles</a>
+    <!-- <a href="../">RSS</a> -->
   </div>
 ---
 
@@ -17,15 +17,15 @@ Measurement conference 2024 just wrapped up and it was Dewesoft's biggest confer
 yet. More than 500 people from all over the world came together to listen to
 interesting lectures, network, play football, drink beer, and just have fun in
 general. The conference hosted 70 lectures ranging across a wide variety of
-topics from the measurement & test industries, from general data acquisition
-and analysis, sensors, buses, loggers, power, structural dynamics, to automotive
-and aerospace testing, and more.
+topics in the measurement & test industries, from general data acquisition
+and analysis, sensors, buses, loggers, power, structural & rotational dynamics,
+to automotive and aerospace testing, and more.
 
 With so many topics it is very hard to be an expert in all of them. That is why when attendees
-register for the conference, we give the attendees a magic wand that they can use to make a selection of lectures
+register for the conference, we give them a magic wand that they can use to make a selection of lectures
 they are particularly interested in. We then take these wishes into account
-when generating the timetables, so the attendees get to listen to most of the
-material of their interest.
+when generating the timetables, so the attendees get to listen to 
+material that they find interesting.
 
 This is great for the attendees, but it also means generating timetables is not really
 a trivial effort. A decade ago when the conference was much much smaller such
@@ -147,10 +147,10 @@ containing `[1 8 4 3 1 6 9 1 9]` should have an energy of 3 for the two
 repeated 1s and one repeated 9 instead of just an energy of 1).
 
 ## Stage 1
-As mentioned earlier, in the first stage we just concentrate on generating a valid lecture arrangement, and forget about the registered attendees for a second.
+As mentioned earlier, in the first stage we just concentrate on generating a valid lecture arrangement across the time slots and rooms, and forget about the registered attendees for a second.
 This simplifies our problem as there are actually a few additional constraints that we have to take into account, and ignoring any of these would automatically result in an invalid timetable:
 
-  - Dewesoft employees can hold multiple lectures while other registered attendees should only hold exactly one lecture so they can attend the rest of the conference (out of the 70 lectures, approximately 30 were held by Dewesoft employees, and the rest were held by other registered attendees),
+  - Dewesoft employees can hold multiple lectures while other lecturers should only hold exactly one lecture so they can attend the rest of the conference (out of the 70 lectures, approximately 30 were held by Dewesoft employees, and the rest were held by other registered attendees),
   - no one lecturer should have more than 7 lectures scheduled in total,
   - some lectures can only appear in certain time slots or certain (subset of) rooms due to equipment requirements,
   - some lectures should be scheduled before others (think basic -> advanced type of lectures),
@@ -177,22 +177,31 @@ by instead adding support for UNDO_MOVE to the library.
 If you think back to the Sudoku example, the ENERGY function would check if all
 TODO
 
+TODO: duplicate some lectures multiple times
+TODO: which constraints do we encode into MOVE and which into ENERGY
+
+- INIT: randomly assign lectures to time slots and rooms.
 - MOVE: swap two lectures. after swapping, rearrange the lectures so that the lectures with most registered attendees get the biggest rooms
 - ENERGY: check that lecturer doesn't have a lecture in the same slot. all the constraints have to hold. lectures should be held in rooms so that they have enough chairs for all the registered attendees for that lecture. all of these constraints should hold so energy should end up as 0, otherwise we should manually relax some constraints.
+
+At the end, move the lectures around so that the most popular lectures are in the biggest rooms.
 
 ## Stage 2
 Stage 2 is much simpler than stage one. We now have a valid timetable from stage 1 and all we have to do is create personalized timetables for all registered attendees, taking as many of their wishes into account as possible.
 
-There are a few invariants we can use here. One observation is that for every
-time slot each attendee can be present at exactly one lecture. But with
-this invariant the MOVE and ENERGY steps of the algorithm would be quite
-difficult to implement.
+How do we do this? One observation is that for every time slot each attendee
+can be present at exactly one lecture. But with just this invariant it would be
+quite difficult to take the wishes of the guests into account in the MOVE and
+ENERGY steps, and this was the entire point of generating timetables in the
+first place.
 
 Instead we keep this invariant in mind but use a simpler idea:
 
-- for INIT we randomly assign attendees to every lecture they registered for regardless of the time slot (if any lecture is repeated, choose any random repetition),
-- for MOVE we move a random attendee between any duplicates of the lectures they registered for. Here we must make sure to only move the attendee if the target lecture has enough free seats for the attendee.
-- ENERGY: check how many times an attendee appears two or more times in each time slot. The actual energy is actually the # of appearances - 1 squared and should be minimized (explain the 1/3 ~= 5/15 >> 1/15 in terms of how bad it is)
+- For INIT we randomly assign attendees to every lecture they registered for, regardless of the time slot. If any lecture they chose is repeated multiple times, choose any one random repetition.
+- For MOVE we pick a random attendee and move them between any repetition of the lectures they registered for. Here we must make sure to only move the attendee to the other repetition if the target room still has enough free seats for the attendee.
+- And finally for ENERGY we check how many times an attendee appears two or more times in each time slot, since that means they can't listen to all the lectures they would otherwise want to.
+
+The actual energy is actually the # of appearances - 1 squared and should be minimized (explain the 1/3 ~= 5/15 >> 1/15 in terms of how bad it is)
 
 When generating the final timetables at the end we make sure that 
 

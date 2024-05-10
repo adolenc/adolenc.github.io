@@ -36,6 +36,14 @@ h2:before {
   content: "| ";
   font-size: 1.3em;
   color: #ff5e62;
+  text-shadow: 0px 0px 8px #ff5e62;
+}
+
+h2 {
+  background: linear-gradient(90deg, #ff5e62 0%, #000000 1.5em);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 a {
@@ -70,22 +78,21 @@ code {
 }
 
 ul {
-  list-style-type: "- ";
+  list-style-type: "– ";
   padding-top: -20;
 }
 
 #backlinks {
-  margin-top: 1em;
+  margin-top: 1.5em;
   border-top: 1px solid #CCC;
-  text-align: center;
 }
 
-.backlink {
+#backlinks a {
   color: #555;
   text-decoration: none;
   margin-right: 2.5em;
 }
 
-.backlink:hover {
-  color: #000;
+#backlinks a:hover {
+  text-decoration: underline;
 }
