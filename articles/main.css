@@ -1,14 +1,62 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
 
+body::before {
+  display: block;
+  position: absolute;
+  width: 220%;
+  height: 100%;
+  z-index: -1;
+  left: -60%;
+  top: 0;
+  /* right: 0; */
+  content: "";
+  background-image: url('./test-bg.png');
+  background-size: contain;
+  overflow: hidden;
+  filter: blur(100px);
+  opacity: 0.7;
+}
+
 body {
+  overflow-x: hidden;
+  position: relative;
   font-family: 'Roboto', sans-serif;
   font-size: 0.9em;
   background-color: #FEFFEB;
-  max-width: 700px;
+  max-width: 35em;
   line-height: 1.4;
   margin: 0 auto;
   padding: 0 2em;
 }
+
+/* body::before { */
+/*   display: block; */
+/*   position: absolute; */
+/*   width: 300%; */
+/*   height: 100%; */
+/*   z-index: -1; */
+/*   left: -100%; */
+/*   top: 0; */
+/*   right: 0; */
+/*   content: ""; */
+/*   background-image: url('./test-bg.png'); */
+/*   background-size: contain; */
+/*   background-repeat: repeat-y; */
+/*   filter: blur(100px); */
+/* } */
+/*  */
+/* body { */
+/*   overflow: auto; */
+/*   overflow-x: hidden; */
+/*   position: relative; */
+/*   font-family: 'Roboto', sans-serif; */
+/*   font-size: 0.9em; */
+/*   background-color: #FEFFEB; */
+/*   max-width: 700px; */
+/*   line-height: 1.4; */
+/*   margin: 0 auto; */
+/*   padding: 0 2em; */
+/* } */
 
 header {
   background: linear-gradient(110deg, #ff9966, #ff5e62);
@@ -21,6 +69,7 @@ header {
 
 .date {
   color: #FAFAFA;
+  text-shadow: 0px 0px 6px #000;
 }
 
 .author {
@@ -33,17 +82,19 @@ h1 {
 }
 
 h2:before {
-  content: "| ";
+  content: "|";
+  padding-right: 0.18em;
   font-size: 1.3em;
   color: #ff5e62;
   text-shadow: 0px 0px 8px #ff5e62;
 }
 
 h2 {
-  background: linear-gradient(90deg, #ff5e62 0%, #000000 1.5em);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
+  margin-top: 2em;
+  /* background: linear-gradient(90deg, #ff5e62 0%, #000000 1.5em); */
+  /* -webkit-background-clip: text; */
+  /* background-clip: text; */
+  /* -webkit-text-fill-color: transparent; */
 }
 
 a {
