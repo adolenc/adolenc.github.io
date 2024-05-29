@@ -1,10 +1,10 @@
 ---
 title: Generating Timetables for \#MC2024
 author: Andrej Dolenc <mail@adolenc.me>
-date: May 10th, 2024
+date: May 2024
 date-meta: 2024-05-10
 header-includes:
-  <link rel="shortcut icon" href="https://cdn.sstatic.net/Sites/tex/Img/favicon.ico?v=91427af8e60a">
+  <link rel="shortcut icon" href="../../favicon.png">
   <link rel="stylesheet" href="../main.css">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, minimum-scale=1.0, maximum-scale=3.0" />
 include-after: |
@@ -51,7 +51,8 @@ possible.
 For easier understanding, here is a picture of the available time slots and
 rooms for the timetable:
 
-![TODO: Timetable](./timetable_template.png)
+![Timetable template; 15 non-overlapping time slots over 3 days, each small
+square represents one of the available rooms.](./timetable2.png)
 
 It often makes sense to do some preliminary back-of-the-envelope calculations
 to see if our problem is actually solvable. For example the venue can hold `3

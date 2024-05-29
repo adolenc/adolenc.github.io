@@ -2,7 +2,7 @@
 title: Articles
 author: Andrej Dolenc <mail@adolenc.me>
 header-includes:
-  <link rel="shortcut icon" href="https://cdn.sstatic.net/Sites/tex/Img/favicon.ico?v=91427af8e60a">
+  <link rel="shortcut icon" href="../favicon.png">
   <link rel="stylesheet" href="main.css">
 include-after: |
   <div id="backlinks">

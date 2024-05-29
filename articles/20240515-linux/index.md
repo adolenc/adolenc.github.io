@@ -44,7 +44,7 @@ My Linux Setup (2024)
   - how does docker work
 - flatpak for gui apps that should be updated all the time
   - flatpak ~/bin/ scripts
-  - flatpak permissions app
+  - flatpak permissions app (add xdg-config/mpv:ro to access files in $XDG_CONFIG_HOME/mpv)
   - updating flatpaks
   - steam & proton
   - download folders default to tmpfs
