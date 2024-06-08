@@ -25,7 +25,7 @@ My Linux Setup (2024)
   - oom killer
   - pulseaudio
   - X.org
-  - ssh
+  - ssh (ssh localhost -t "zsh --login -c 'distrobox enter ubuntu22.04'")
   - colemak keyboard layout (where is it defined)
   - i3
   - nvidia drivers
