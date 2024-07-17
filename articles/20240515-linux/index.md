@@ -33,6 +33,7 @@ My Linux Setup (2024)
   - yadm for dotfiles
   - kitty terminal
     - zsh
+      - copilot: https://x.com/arjie/status/1575201117595926530?t=K_8J6rG18DrV5bcCLDrrYw , and in zshrc: EDITOR=, autoload edit-command-line; zle -N edit-command-line; bindkey -M vicmd v edit-command-line
     - fzf
   - docker
 - distrobox with ubuntu installed 
