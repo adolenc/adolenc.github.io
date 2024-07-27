@@ -31,6 +31,7 @@
             font-size: 4em;
             margin-bottom: 0em;
             margin-bottom: -0.2em;
+            animation-delay: 4s;
         }
 
         h2 {
@@ -51,21 +52,22 @@
         }
 
         a:hover {
-            animation: chromatic-aberration 0.3s ease-in-out;
+            animation: chromatic-aberration 0.25s ease-in-out;
         }
 
         @keyframes chromatic-aberration {
             0% {
-                text-shadow: 0 0 0px rgba(0, 0, 0, 0);
+                text-shadow: 0em 0em 0px black;
             }
             15% {
-                text-shadow: -5px 0px 1px rgba(255, 90, 90, 0.8),
-                              5px 0px 1px rgba(90, 90, 255, 0.8),
-                              2px 0px 0px yellow,
-                             -2px 0px 0px rgba(0, 255, 0, 0.8);
+                text-shadow:
+                   0.06ch 0ch 0.08ch rgba(255, 255, 0, 0.8),
+                  -0.06ch 0ch 0.08ch rgba(0,   255, 0, 0.8),
+                  -0.30ch 0ch 0.02ch rgba(255, 90, 90, 0.8),
+                   0.30ch 0ch 0.02ch rgba(90, 90, 255, 0.8);
             }
             100% {
-                text-shadow: 0 0 0px rgba(0, 0, 0, 0);
+                text-shadow: 0em 0em 0px black;
             }
         }
 
