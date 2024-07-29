@@ -9,11 +9,11 @@
       document.addEventListener("DOMContentLoaded", function(event) {
         // Finish the link hover animations even if the mouse moves away
         for (const link of document.getElementsByTagName('a')) {
-          link.addEventListener('animationend', function(e) {
-            link.classList.remove('chromatic-aberration-animation');
-          });
           link.addEventListener('mouseover', function(e) {
             link.classList.add('chromatic-aberration-animation');
+          });
+          link.addEventListener('animationend', function(e) {
+            link.classList.remove('chromatic-aberration-animation');
           });
         }
       });
