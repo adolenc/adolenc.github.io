@@ -7,13 +7,13 @@
 
     <script type="text/javascript">
       document.addEventListener("DOMContentLoaded", function(event) {
-        // Finish the hover animations even if the mouse moves away
-        for (const element of document.getElementsByTagName('a')) {
-          element.addEventListener('animationend', function(e) {
-            element.classList.remove('chromatic-aberration-animation');
+        // Finish the link hover animations even if the mouse moves away
+        for (const link of document.getElementsByTagName('a')) {
+          link.addEventListener('animationend', function(e) {
+            link.classList.remove('chromatic-aberration-animation');
           });
-          element.addEventListener('mouseover', function(e) {
-            element.classList.add('chromatic-aberration-animation');
+          link.addEventListener('mouseover', function(e) {
+            link.classList.add('chromatic-aberration-animation');
           });
         }
       });
