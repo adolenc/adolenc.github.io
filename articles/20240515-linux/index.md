@@ -40,8 +40,9 @@ My Linux Setup (2024)
   - install command (with nvidia cuda)
   - binding in i3 for new terminal
     - to get the full integration with kitty inside distrobox, you need to use the hack described at [kitty documentation](https://github.com/kovidgoyal/kitty/blob/master/docs/shell-integration.rst#shell-integration-in-a-container)
-    - in short, download kitten-linux-amd64 into the $PATH, chmod +x it, and then use the following keybinding in `.i3/config`:
-    - `bindsym $mod+Shift+Return exec "kitty sh -c 'distrobox enter ubuntu22.04 -- ~/kitten-linux-amd64 run-shell --shell=/bin/zsh'"`
+    - we don't need to manually download kitten, as it comes installed with the kitty installation and distrobox anyway maps the home dir into docker
+    - in short, use the following key binding in `.i3/config` (assuming you installed kitty into .local, your distrobox distribution is ubuntu22.04, and your shell is zsh):
+    - `bindsym $mod+Shift+Return exec "kitty sh -c 'distrobox enter ubuntu22.04 -- ~/.local/kitty.app/bin/kitten run-shell --shell=/bin/zsh'"`
     - with this, mod+shift+return will create a new window with the distrobox running, and everything related to kitty will automatically work (including ctrl+shift+g for to put the last executed command into the pager)
   - "n" alias for new terminal in current directory
   - passthrough to host os
