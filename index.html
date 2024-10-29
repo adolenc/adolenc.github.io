@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Andrej Dolenc</title>
+    <link rel="icon" type="image/png" href="favicon.png">
 
     <script type="text/javascript">
       document.addEventListener("DOMContentLoaded", function(event) {
@@ -18,50 +19,79 @@
         }
       });
     </script>
+    <script type="text/javascript" src="./beziers.js"></script>
 
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
 
-        body {
+        * {
             margin: 0;
             padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            height: 100%;
+            background: linear-gradient(125deg, rgb(0 255 249 / 15%) 0%, rgb(255 0 0 / 15%) 50%, rgb(231 255 0 / 15%) 100%);
+        }
+
+        body {
             font-family: 'Roboto', sans-serif;
-            height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: black;
-            background: rgb(255 255 255);
-            background: linear-gradient(125deg, rgb(0 255 249 / 22%) 0%, rgb(255 0 0 / 22%) 50%, rgb(231 255 0 / 22%) 100%);
+            min-width: min-content;
+            color: white;
+        }
+
+        #canvas {
+            width: 500px;
+            height: 500px;
+            z-index: -3;
+            transition: all 1.0s ease;
+            margin-bottom: 40px;
         }
 
         .container {
-            text-align: left;
-            margin: 0 auto;
-            max-width: 600px;
-            margin-left: 3em;
-            position: relative;
+            white-space: nowrap;
+            min-width: min-content;
+            position: absolute;
+            bottom: 40px;
+            left: 20px;
+            color: white;
+            text-shadow: 0ch 0ch 1.5ch #555;
         }
 
         h1 {
-            font-size: 4em;
-            margin-bottom: 0em;
-            margin-bottom: -0.2em;
-            animation-delay: 4s;
+            margin-bottom: 0.2em;
+            font-size: 3.3em;
+            z-index: 2;
         }
 
         h2 {
-            font-size: 2em;
-            margin-bottom: 2.2em;
+            font-size: 1.7em;
+            margin-bottom: 1.5em;
+            z-index: 2;
         }
 
         p {
             font-size: 1.5em;
-            margin-bottom: 1em;
+            margin-bottom: 0.7em;
+            z-index: 2;
+        }
+
+        @media screen and (max-height: 650px) {
+            #canvas {
+                position: absolute;
+                bottom: 0;
+                opacity: 0.4;
+                margin-bottom: 0px;
+            }
+
+            .container {
+                bottom: 20px;
+            }
         }
 
         a {
-            color: black;
+            color: white;
             text-decoration: underline;
             position: relative;
             display: inline-block;
@@ -99,12 +129,15 @@
         }
 
         ::selection {
-          background: #fffea0;
+            background: #fffea0;
+            color: #444;
+            text-shadow: 0ch 0ch 0ch #fff;
         }
     </style>
 </head>
 <body>
     <div class="container">
+        <canvas id="canvas"></canvas>
         <h1>Andrej Dolenc</h1>
         <h2>Software engineer</h2>
         <p>Check out my <a href="CV_Andrej_Dolenc_SWE_2024.pdf">CV</a></p>
