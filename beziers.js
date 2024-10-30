@@ -5,9 +5,9 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
 var canvas = document.getElementById('canvas');
 var ctx = canvas.getContext('2d');
+const dpr = window.devicePixelRatio || 1;
 
 function setupCanvas() {
-    const dpr = window.devicePixelRatio || 1;
     const displayWidth = 500;
     const displayHeight = 500;
     canvas.width = displayWidth * dpr;
@@ -19,6 +19,13 @@ function setupCanvas() {
 }
 setupCanvas();
 window.addEventListener('resize', setupCanvas);
+
+// add event listener for mouse position
+var mouse = {x: 0, y: 0};
+canvas.addEventListener('mousemove', function(e) {
+  mouse.x = (e.clientX - canvas.getBoundingClientRect().left) * (500 / canvas.clientWidth);
+  mouse.y = (e.clientY - canvas.getBoundingClientRect().top) * (500 / canvas.clientHeight);
+});
 
 function clamp(num, min, max) {
   return Math.max(min, Math.min(num, max));
@@ -232,6 +239,12 @@ function loop(ts) {
     curves[i].update(ms);
     curves[i].draw(ms);
   }
+  // draw a circle at mouse position
+  ctx.beginPath();
+  ctx.arc(mouse.x, mouse.y, 5, 0, 2 * Math.PI);
+  ctx.fillStyle = 'black';
+  ctx.fill();
+
 }
 loop();
 
