@@ -45,20 +45,22 @@
             width: 500px;
             height: 500px;
             z-index: -3;
-            transition: all 1.0s ease;
             margin-bottom: 40px;
+            transition: all 1.0s ease;
         }
 
         .container {
             white-space: nowrap;
             min-width: min-content;
             position: absolute;
-            bottom: 40px;
+            bottom: 50%;
             left: 50%;
             width: fit-content;
-            transform: translate(-50%);
+            transform: translate(-50%, 50%);
             color: white;
             text-shadow: 0ch 0ch 1.5ch #555;
+            padding-bottom: 50px;
+            transition: all 1.0s ease;
         }
 
         h1 {
@@ -79,6 +81,18 @@
             z-index: 2;
         }
 
+        @media screen and (max-height: 850px) {
+            #canvas {
+                margin-bottom: 0px;
+            }
+
+            .container {
+                bottom: 0px;
+                padding-bottom: 0px;
+                transform: translate(-50%, 0%);
+            }
+        }
+
         @media screen and (max-height: 650px) {
             #canvas {
                 position: absolute;
@@ -88,7 +102,9 @@
             }
 
             .container {
-                bottom: 20px;
+                bottom: 0px;
+                padding-bottom: 0px;
+                transform: translate(-50%, 0%);
             }
         }
 

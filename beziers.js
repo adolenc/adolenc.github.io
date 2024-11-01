@@ -43,7 +43,8 @@ function createStaticCurve(control_pts) {
 
     draw: function(t) {
       ctx.lineWidth = 6;
-      ctx.strokeStyle = 'hsla('+this.hue+',100%,95%,'+this.alpha+')';
+      ctx.strokeStyle = 'hsla('+this.hue+',100%,90%,'+this.alpha+')';
+      ctx.lineCap = 'round';
       ctx.beginPath();
       ctx.moveTo(this.p[0].x, this.p[0].y);
       ctx.bezierCurveTo(this.p[1].x, this.p[1].y, this.p[2].x, this.p[2].y, this.p[3].x, this.p[3].y);
@@ -80,6 +81,7 @@ function createFlyingCurve(i, static_curve) {
 
       ctx.lineWidth = 4;
       ctx.strokeStyle = 'hsla('+this.hue+',100%,65%,'+this.alpha+')';
+      ctx.lineCap = 'round';
       ctx.beginPath();
       ctx.moveTo(this.p[0].x, this.p[0].y);
       ctx.bezierCurveTo(this.p[1].x, this.p[1].y, this.p[2].x, this.p[2].y, this.p[3].x, this.p[3].y);
