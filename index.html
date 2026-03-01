@@ -8,6 +8,9 @@
 
     <script type="text/javascript">
       document.addEventListener("DOMContentLoaded", function(event) {
+        var noCursor = document.createElement('style');
+        noCursor.textContent = '* { cursor: none !important; }';
+        document.head.appendChild(noCursor);
         // Finish the link hover animations even if the mouse moves away
         for (const link of document.getElementsByTagName('a')) {
           link.addEventListener('mouseover', function(e) {
@@ -23,10 +26,11 @@
         glow.id = 'cursor-glow';
         document.body.appendChild(glow);
 
-        let glowX = 0, glowY = 0, targetGlowX = 0, targetGlowY = 0;
+        let glowX = 0, glowY = 0, targetGlowX = 0, targetGlowY = 0, glowInited = false;
         document.addEventListener('mousemove', (e) => {
           targetGlowX = e.clientX;
           targetGlowY = e.clientY;
+          if (!glowInited) { glowX = targetGlowX; glowY = targetGlowY; glowInited = true; }
           glow.style.opacity = '1';
         });
         document.addEventListener('mouseleave', () => {
@@ -41,7 +45,45 @@
         }
         updateGlow();
 
-        // Magnetic links
+        // Cursor ball
+        const ball = document.createElement('div');
+        ball.id = 'cursor-ball';
+        document.body.appendChild(ball);
+
+        let ballX = 0, ballY = 0, ballScale = 1, ballAlpha = 0.1, stillSince = 0, ballInited = false;
+        function updateBall() {
+          if (!ballInited) { ballX = targetGlowX; ballY = targetGlowY; }
+          var dx = targetGlowX - ballX, dy = targetGlowY - ballY;
+          ballX += dx * 0.35;
+          ballY += dy * 0.35;
+          if (!ballInited && (targetGlowX !== 0 || targetGlowY !== 0)) ballInited = true;
+          var speed = Math.sqrt(dx * dx + dy * dy);
+          var now = performance.now();
+          if (speed > 2) {
+            stillSince = now;
+            var targetScale = 0.3;
+            var targetAlpha = 0.6;
+            ballScale += (targetScale - ballScale) * 0.1;
+            ballAlpha += (targetAlpha - ballAlpha) * 0.1;
+          } else {
+            var stillDelay = 1000;
+            if (now - stillSince > stillDelay) {
+              ballScale += (1 - ballScale) * 0.002;
+              ballAlpha += (0.1 - ballAlpha) * 0.002;
+            }
+          }
+          ball.style.transform = 'translate(calc(' + ballX + 'px - 50%), calc(' + ballY + 'px - 50%)) scale(' + ballScale + ')';
+          ball.style.background = 'rgba(255, 255, 255, ' + ballAlpha + ')';
+          requestAnimationFrame(updateBall);
+        }
+        updateBall();
+
+        document.addEventListener('mouseleave', () => {
+          ball.style.opacity = '0';
+        });
+        document.addEventListener('mouseenter', () => {
+          ball.style.opacity = '1';
+        });
         for (const link of document.querySelectorAll('a')) {
           link.addEventListener('mousemove', function(e) {
             const rect = link.getBoundingClientRect();
@@ -49,8 +91,12 @@
             const y = e.clientY - rect.top - rect.height / 2;
             link.style.transform = 'translate(' + (x * 0.3) + 'px, ' + (y * 0.5) + 'px)';
           });
+          link.addEventListener('mouseenter', function() {
+            ball.style.opacity = '0';
+          });
           link.addEventListener('mouseleave', function() {
             link.style.transform = '';
+            ball.style.opacity = '1';
           });
         }
       });
@@ -160,12 +206,16 @@
             text-decoration: underline;
             position: relative;
             display: inline-block;
-            transition: transform 0.25s cubic-bezier(0.23, 1, 0.32, 1);
+            transition: transform 0.25s cubic-bezier(0.23, 1, 0.32, 1), background-color 0.2s ease, padding 0.2s ease, margin 0.2s ease;
+            border-radius: 8px;
         }
 
         a:hover {
             animation: chromatic-aberration 0.5s ease-in-out;
             text-shadow: 0 0 8px hsla(0, 0%, 100%, 0.4);
+            background-color: rgba(255, 255, 255, 0.2);
+            padding: 2px 8px;
+            margin: -2px -8px;
         }
 
         .chromatic-aberration-animation {
@@ -247,6 +297,21 @@
         .container p:nth-of-type(1) { animation-delay: 0.6s; }
         .container p:nth-of-type(2) { animation-delay: 0.75s; }
         .container p:nth-of-type(3) { animation-delay: 0.9s; }
+
+        #cursor-ball {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.6);
+            pointer-events: none;
+            transform: translate(-50%, -50%);
+            z-index: 4;
+            will-change: transform;
+            transition: opacity 0.2s ease;
+        }
 
         #cursor-glow {
             position: fixed;
