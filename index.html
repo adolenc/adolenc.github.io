@@ -279,6 +279,19 @@
             }
         }
 
+        @keyframes h1-reveal {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+                filter: blur(8px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+                filter: blur(0) drop-shadow(0 0 28px rgba(255, 255, 255, 0.55)) drop-shadow(0 4px 16px rgba(0, 0, 0, 0.45));
+            }
+        }
+
         .container h1,
         .container h2,
         .container p {
@@ -289,7 +302,7 @@
         }
 
         .container h1 {
-            animation: text-reveal 0.8s cubic-bezier(0.23, 1, 0.32, 1) 0.2s forwards, shimmer 20s ease-in-out 1.5s infinite;
+            animation: h1-reveal 0.8s cubic-bezier(0.23, 1, 0.32, 1) 0.2s forwards, shimmer 20s ease-in-out 1.5s infinite;
         }
         .container h2 {
             animation-delay: 0.4s;
