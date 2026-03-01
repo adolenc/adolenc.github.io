@@ -31,9 +31,32 @@ function getDirectionVector(p1, p2) {
     return { x: dx / length, y: dy / length };
 }
 
+function sampleBezier(p, t) {
+  var mt = 1 - t;
+  return {
+    x: mt*mt*mt*p[0].x + 3*mt*mt*t*p[1].x + 3*mt*t*t*p[2].x + t*t*t*p[3].x,
+    y: mt*mt*mt*p[0].y + 3*mt*mt*t*p[1].y + 3*mt*t*t*p[2].y + t*t*t*p[3].y
+  };
+}
+
+function distToStaticCurve(sc, mx, my) {
+  var minDist = Infinity;
+  for (var i = 0; i <= 12; i++) {
+    var t = i / 12, mt = 1 - t;
+    var x = mt*mt*mt*(sc.p[0].x+sc.repelPts[0].x) + 3*mt*mt*t*(sc.p[1].x+sc.repelPts[1].x) + 3*mt*t*t*(sc.p[2].x+sc.repelPts[2].x) + t*t*t*(sc.p[3].x+sc.repelPts[3].x);
+    var y = mt*mt*mt*(sc.p[0].y+sc.repelPts[0].y) + 3*mt*mt*t*(sc.p[1].y+sc.repelPts[1].y) + 3*mt*t*t*(sc.p[2].y+sc.repelPts[2].y) + t*t*t*(sc.p[3].y+sc.repelPts[3].y);
+    var dx = x - mx, dy = y - my;
+    var d = Math.sqrt(dx*dx + dy*dy);
+    if (d < minDist) minDist = d;
+  }
+  return minDist;
+}
+
 var curves = [];
+var staticCurves = [];
 
 var mouseCanvasX = 250, mouseCanvasY = 250;
+var prevMouseCanvasX = 250, prevMouseCanvasY = 250;
 var smoothEyeX = 0, smoothEyeY = 0;
 document.addEventListener('mousemove', function(e) {
     var rect = canvas.getBoundingClientRect();
@@ -46,6 +69,9 @@ function createStaticCurve(control_pts) {
     alpha: 0,
     alpha_d: 0,
     hue: 0,
+    repelPts: [{x:0,y:0},{x:0,y:0},{x:0,y:0},{x:0,y:0}],
+    repelVel: [{x:0,y:0},{x:0,y:0},{x:0,y:0},{x:0,y:0}],
+    lastRepelTime: 0,
 
     p: control_pts,
 
@@ -54,8 +80,12 @@ function createStaticCurve(control_pts) {
       ctx.strokeStyle = 'hsla('+this.hue+',100%,90%,'+this.alpha+')';
       ctx.lineCap = 'round';
       ctx.beginPath();
-      ctx.moveTo(this.p[0].x, this.p[0].y);
-      ctx.bezierCurveTo(this.p[1].x, this.p[1].y, this.p[2].x, this.p[2].y, this.p[3].x, this.p[3].y);
+      ctx.moveTo(this.p[0].x + this.repelPts[0].x, this.p[0].y + this.repelPts[0].y);
+      ctx.bezierCurveTo(
+        this.p[1].x + this.repelPts[1].x, this.p[1].y + this.repelPts[1].y,
+        this.p[2].x + this.repelPts[2].x, this.p[2].y + this.repelPts[2].y,
+        this.p[3].x + this.repelPts[3].x, this.p[3].y + this.repelPts[3].y
+      );
       ctx.stroke();
     },  
     update: function(t) {
@@ -64,6 +94,7 @@ function createStaticCurve(control_pts) {
     }
   };
   curves.push(bez);
+  staticCurves.push(bez);
   return bez;
 }
 
@@ -143,6 +174,9 @@ function createFlyingCurve(i, static_curve) {
         static_curve.alpha = Math.random() * 5 + 2;
         static_curve.alpha_d = Math.random() * 0.002 + 0.0005;
         static_curve.hue = this.hue;
+        static_curve.repelPts = [{x:0,y:0},{x:0,y:0},{x:0,y:0},{x:0,y:0}];
+        static_curve.repelVel = [{x:0,y:0},{x:0,y:0},{x:0,y:0},{x:0,y:0}];
+        static_curve.lastRepelTime = 0;
         this.static_curve_refreshed = true;
       }
       if (this.static_curve_refreshed && interp_t > 1)
@@ -264,6 +298,57 @@ function loop(ts) {
   }
 
   let ms = ts / 1000;
+
+  // Mouse repulsion: velocity-based physics — mouse imparts impulse, control points fly away
+  var mouseMoved = Math.abs(mouseCanvasX - prevMouseCanvasX) + Math.abs(mouseCanvasY - prevMouseCanvasY) > 0.5;
+  prevMouseCanvasX = mouseCanvasX;
+  prevMouseCanvasY = mouseCanvasY;
+
+  var REPEL_DIST = 60;
+  var CTRL_REPEL_RADIUS = 120;
+  var DECAY_DELAY = 0.5;
+  for (var si = 0; si < staticCurves.length; si++) {
+    var sc = staticCurves[si];
+
+    // Integrate velocity into position, then apply friction
+    for (var pi = 0; pi < 4; pi++) {
+      sc.repelPts[pi].x += sc.repelVel[pi].x;
+      sc.repelPts[pi].y += sc.repelVel[pi].y;
+      sc.repelVel[pi].x *= 0.93;
+      sc.repelVel[pi].y *= 0.93;
+    }
+
+    // Check proximity (pauses decay timer while mouse is nearby)
+    var withinRange = ms > 10 && sc.alpha > 0.05 &&
+                      distToStaticCurve(sc, mouseCanvasX, mouseCanvasY) < REPEL_DIST;
+    if (withinRange) sc.lastRepelTime = ms;
+
+    // Delayed position decay — very slow drift back after mouse leaves
+    if (ms - sc.lastRepelTime > DECAY_DELAY) {
+      for (var pi = 0; pi < 4; pi++) {
+        sc.repelPts[pi].x *= 0.99;
+        sc.repelPts[pi].y *= 0.99;
+      }
+    }
+
+    // Impart impulse when mouse is moving near the curve
+    if (withinRange && mouseMoved) {
+      for (var pi = 0; pi < 4; pi++) {
+        var cx = sc.p[pi].x + sc.repelPts[pi].x;
+        var cy = sc.p[pi].y + sc.repelPts[pi].y;
+        var pdx = cx - mouseCanvasX, pdy = cy - mouseCanvasY;
+        var pd = Math.sqrt(pdx*pdx + pdy*pdy) || 1;
+        if (pd < CTRL_REPEL_RADIUS) {
+          var impulse = (1 - pd / CTRL_REPEL_RADIUS) * 3.5;
+          sc.repelVel[pi].x += (pdx / pd) * impulse;
+          sc.repelVel[pi].y += (pdy / pd) * impulse;
+        }
+      }
+      sc.alpha = Math.min(sc.alpha, 0.6);
+      if (sc.alpha_d < 0.02) sc.alpha_d = 0.02;
+    }
+  }
+
   for (let i = curves.length - 1; i >= 0; i--) {
     curves[i].update(ms);
     curves[i].draw(ms);
