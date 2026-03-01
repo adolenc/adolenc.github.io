@@ -33,6 +33,14 @@ function getDirectionVector(p1, p2) {
 
 var curves = [];
 
+var mouseCanvasX = 250, mouseCanvasY = 250;
+var smoothEyeX = 0, smoothEyeY = 0;
+document.addEventListener('mousemove', function(e) {
+    var rect = canvas.getBoundingClientRect();
+    mouseCanvasX = (e.clientX - rect.left) / rect.width * 500;
+    mouseCanvasY = (e.clientY - rect.top) / rect.height * 500;
+});
+
 function createStaticCurve(control_pts) {
   var bez = {
     alpha: 0,
@@ -221,13 +229,39 @@ let face = [
   [ {x: 319.574462890625, y: 256.5319175720215}, {x: 318.574462890625, y: 266.5319175720215}, {x: 327.574462890625, y: 272.5319175720215}, {x: 335.574462890625, y: 269.5319175720215} ],
   [ {x: 335.574462890625, y: 268.5319175720215}, {x: 342.574462890625, y: 269.5319175720215}, {x: 346.574462890625, y: 259.5319175720215}, {x: 341.574462890625, y: 255.53191757202148} ],
 ];
+var eyeStaticCurves = [];
+var eyeOriginalPoints = [];
+var EYE_START = face.length - 4; // last 4 curves are the eyes
 for (let i = 0; i < face.length; i++) {
-  createFlyingCurve(i, createStaticCurve(face[i]));
+  var sc = createStaticCurve(face[i]);
+  createFlyingCurve(i, sc);
+  if (i >= EYE_START) {
+    eyeStaticCurves.push(sc);
+    eyeOriginalPoints.push(sc.p.map(pt => ({x: pt.x, y: pt.y})));
+  }
 }
 
 function loop(ts) {
   window.requestAnimationFrame(loop);
   ctx.clearRect(0,0,canvas.width,canvas.height);
+
+  // Subtle eye-following: offset eye curves toward cursor
+  var eyeCenterX = 275, eyeCenterY = 265;
+  var dx = mouseCanvasX - eyeCenterX;
+  var dy = mouseCanvasY - eyeCenterY;
+  var dist = Math.sqrt(dx * dx + dy * dy) || 1;
+  var maxOffset = 3;
+  var factor = Math.min(dist / 100, 1) * maxOffset;
+  var targetX = (dx / dist) * factor;
+  var targetY = (dy / dist) * factor;
+  smoothEyeX += (targetX - smoothEyeX) * 0.08;
+  smoothEyeY += (targetY - smoothEyeY) * 0.08;
+  for (var ei = 0; ei < eyeStaticCurves.length; ei++) {
+    for (var pi = 0; pi < eyeStaticCurves[ei].p.length; pi++) {
+      eyeStaticCurves[ei].p[pi].x = eyeOriginalPoints[ei][pi].x + smoothEyeX;
+      eyeStaticCurves[ei].p[pi].y = eyeOriginalPoints[ei][pi].y + smoothEyeY;
+    }
+  }
 
   let ms = ts / 1000;
   for (let i = curves.length - 1; i >= 0; i--) {
