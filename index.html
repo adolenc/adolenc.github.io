@@ -23,14 +23,23 @@
         glow.id = 'cursor-glow';
         document.body.appendChild(glow);
 
+        let glowX = 0, glowY = 0, targetGlowX = 0, targetGlowY = 0;
         document.addEventListener('mousemove', (e) => {
-          glow.style.left = e.clientX + 'px';
-          glow.style.top = e.clientY + 'px';
+          targetGlowX = e.clientX;
+          targetGlowY = e.clientY;
           glow.style.opacity = '1';
         });
         document.addEventListener('mouseleave', () => {
           glow.style.opacity = '0';
         });
+
+        function updateGlow() {
+          glowX += (targetGlowX - glowX) * 0.12;
+          glowY += (targetGlowY - glowY) * 0.12;
+          glow.style.transform = 'translate(calc(' + glowX + 'px - 50%), calc(' + glowY + 'px - 50%))';
+          requestAnimationFrame(updateGlow);
+        }
+        updateGlow();
 
         // Magnetic links
         for (const link of document.querySelectorAll('a')) {
@@ -241,6 +250,8 @@
 
         #cursor-glow {
             position: fixed;
+            left: 0;
+            top: 0;
             width: 700px;
             height: 700px;
             border-radius: 50%;
@@ -248,7 +259,8 @@
             pointer-events: none;
             transform: translate(-50%, -50%);
             z-index: 3;
-            transition: left 0.15s ease-out, top 0.15s ease-out, opacity 0.3s ease;
+            will-change: transform;
+            transition: opacity 0.3s ease;
             opacity: 0;
         }
 
