@@ -6,6 +6,7 @@
     <title>Andrej Dolenc</title>
     <link rel="icon" type="image/png" href="favicon.png">
 
+    <meta name="theme-color" content="#CCCCCC">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap">
@@ -119,6 +120,7 @@
 
         html {
             height: 100%;
+            overflow: hidden;
             background-color: #CCC;
             background-image: linear-gradient(125deg, rgb(0 255 249 / 15%) 0%, rgb(255 0 0 / 15%) 50%, rgb(231 255 0 / 15%) 100%);
             background-size: 400% 400%;
@@ -135,6 +137,7 @@
         #canvas {
             width: 22em;
             height: 22em;
+            z-index: -1;
             margin-bottom: 40px;
             padding-top: 20px;
         }
