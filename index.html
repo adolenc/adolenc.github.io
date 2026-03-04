@@ -6,6 +6,9 @@
     <title>Andrej Dolenc</title>
     <link rel="icon" type="image/png" href="favicon.png">
 
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap">
     <script type="text/javascript">
       document.addEventListener("DOMContentLoaded", function(event) {
         var noCursor = document.createElement('style');
@@ -108,8 +111,6 @@
     <script type="text/javascript" src="./beziers.js"></script>
 
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
-
         * {
             margin: 0;
             padding: 0;
@@ -134,7 +135,6 @@
         #canvas {
             width: 22em;
             height: 22em;
-            z-index: -3;
             margin-bottom: 40px;
             padding-top: 20px;
         }
@@ -150,7 +150,7 @@
             color: white;
             text-shadow: 0ch 0ch 1.5ch #555;
             padding-bottom: 50px;
-            transition: all 1.0s ease;
+            transition: bottom 1.0s ease, padding-bottom 1.0s ease, transform 1.0s ease;
         }
 
         h1 {
