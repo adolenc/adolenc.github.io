@@ -128,7 +128,7 @@ function createFlyingCurve(i, static_curve) {
     },
     update: function(t) {
       if (!this.flyby_started) {
-        if (!(static_curve.alpha < 0.3 && Math.pow(t/1.8,3.0) > this.idx))
+        if (!(static_curve.alpha < 0.3 && Math.pow(Math.max(0, t - 2.5)/1.0,3.0) > this.idx))
           return;
         else {
           this.hue = (0.5*Math.min(static_curve.p[0].y, static_curve.p[3].y) / 600
@@ -266,9 +266,14 @@ let face = [
 var eyeStaticCurves = [];
 var eyeOriginalPoints = [];
 var EYE_START = face.length - 4; // last 4 curves are the eyes
+var flyInOrder = Array.from({length: face.length}, (_, i) => i);
+for (let i = flyInOrder.length - 1; i > 0; i--) {
+  const j = Math.floor(Math.random() * (i + 1));
+  [flyInOrder[i], flyInOrder[j]] = [flyInOrder[j], flyInOrder[i]];
+}
 for (let i = 0; i < face.length; i++) {
   var sc = createStaticCurve(face[i]);
-  createFlyingCurve(i, sc);
+  createFlyingCurve(flyInOrder[i], sc);
   if (i >= EYE_START) {
     eyeStaticCurves.push(sc);
     eyeOriginalPoints.push(sc.p.map(pt => ({x: pt.x, y: pt.y})));
