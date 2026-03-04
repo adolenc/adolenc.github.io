@@ -31,11 +31,14 @@
         document.body.appendChild(glow);
 
         let glowX = 0, glowY = 0, targetGlowX = 0, targetGlowY = 0, glowInited = false;
+        let overLink = false, stillSince = 0;
         document.addEventListener('mousemove', (e) => {
           targetGlowX = e.clientX;
           targetGlowY = e.clientY;
           if (!glowInited) { glowX = targetGlowX; glowY = targetGlowY; glowInited = true; }
           glow.style.opacity = '1';
+          if (!overLink) ball.style.opacity = '1';
+          stillSince = performance.now();
         });
         document.addEventListener('mouseleave', () => {
           glow.style.opacity = '0';
@@ -52,29 +55,24 @@
         // Cursor ball
         const ball = document.createElement('div');
         ball.id = 'cursor-ball';
+        ball.style.opacity = '0';
         document.body.appendChild(ball);
 
-        let ballX = 0, ballY = 0, ballScale = 1, ballAlpha = 0.1, stillSince = 0, ballInited = false;
+        let ballX = 0, ballY = 0, ballScale = 1, ballAlpha = 0.1, ballInited = false;
         function updateBall() {
           if (!ballInited) { ballX = targetGlowX; ballY = targetGlowY; }
           var dx = targetGlowX - ballX, dy = targetGlowY - ballY;
           ballX += dx * 0.35;
           ballY += dy * 0.35;
           if (!ballInited && (targetGlowX !== 0 || targetGlowY !== 0)) ballInited = true;
-          var speed = Math.sqrt(dx * dx + dy * dy);
           var now = performance.now();
-          if (speed > 2) {
-            stillSince = now;
-            var targetScale = 0.3;
-            var targetAlpha = 0.6;
-            ballScale += (targetScale - ballScale) * 0.1;
-            ballAlpha += (targetAlpha - ballAlpha) * 0.1;
+          var stillDelay = 1000;
+          if (now - stillSince < stillDelay) {
+            ballScale += (0.25 - ballScale) * 0.35;
+            ballAlpha += (0.6 - ballAlpha) * 0.35;
           } else {
-            var stillDelay = 1000;
-            if (now - stillSince > stillDelay) {
-              ballScale += (1 - ballScale) * 0.002;
-              ballAlpha += (0.1 - ballAlpha) * 0.002;
-            }
+            ballScale += (2 - ballScale) * 0.002;
+            ballAlpha += (0 - ballAlpha) * 0.01;
           }
           ball.style.transform = 'translate(calc(' + ballX + 'px - 50%), calc(' + ballY + 'px - 50%)) scale(' + ballScale + ')';
           ball.style.background = 'rgba(255, 255, 255, ' + ballAlpha + ')';
@@ -83,6 +81,7 @@
         updateBall();
 
         document.addEventListener('mouseleave', () => {
+          overLink = false;
           ball.style.opacity = '0';
         });
         document.addEventListener('mouseenter', (e) => {
@@ -100,9 +99,11 @@
             link.style.transform = 'translate(' + (x * 0.3) + 'px, ' + (y * 0.5) + 'px)';
           });
           link.addEventListener('mouseenter', function() {
+            overLink = true;
             ball.style.opacity = '0';
           });
           link.addEventListener('mouseleave', function() {
+            overLink = false;
             link.style.transform = '';
             ball.style.opacity = '1';
           });
