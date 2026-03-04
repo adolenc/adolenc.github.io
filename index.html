@@ -132,12 +132,11 @@
         }
 
         #canvas {
-            width: 500px;
-            height: 500px;
+            width: 22em;
+            height: 22em;
             z-index: -3;
             margin-bottom: 40px;
             padding-top: 20px;
-            transition: all 1.0s ease;
         }
 
         .container {
@@ -276,6 +275,11 @@
         }
 
         @keyframes text-reveal {
+            from {
+                opacity: 0;
+                transform: translateY(60px);
+                filter: blur(8px);
+            }
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -286,7 +290,7 @@
         @keyframes h1-reveal {
             from {
                 opacity: 0;
-                transform: translateY(20px);
+                transform: translateY(60px);
                 filter: blur(8px);
             }
             to {
@@ -300,8 +304,7 @@
         .container h2,
         .container p {
             opacity: 0;
-            transform: translateY(20px);
-            filter: blur(8px);
+            transform: translateY(60px);
             animation: text-reveal 0.8s cubic-bezier(0.23, 1, 0.32, 1) forwards;
         }
 
