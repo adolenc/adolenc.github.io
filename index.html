@@ -81,7 +81,11 @@
         document.addEventListener('mouseleave', () => {
           ball.style.opacity = '0';
         });
-        document.addEventListener('mouseenter', () => {
+        document.addEventListener('mouseenter', (e) => {
+          glowX = e.clientX; glowY = e.clientY;
+          targetGlowX = e.clientX; targetGlowY = e.clientY;
+          ballX = e.clientX; ballY = e.clientY;
+          glow.style.opacity = '1';
           ball.style.opacity = '1';
         });
         for (const link of document.querySelectorAll('a')) {
