@@ -62,8 +62,8 @@
         function updateBall() {
           if (!ballInited) { ballX = targetGlowX; ballY = targetGlowY; }
           var dx = targetGlowX - ballX, dy = targetGlowY - ballY;
-          ballX += dx * 0.35;
-          ballY += dy * 0.35;
+          ballX += dx * 0.75;
+          ballY += dy * 0.75;
           if (!ballInited && (targetGlowX !== 0 || targetGlowY !== 0)) ballInited = true;
           var now = performance.now();
           var stillDelay = 1000;
